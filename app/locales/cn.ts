@@ -242,18 +242,6 @@ const cn = {
           Title: "代理地址",
           SubTitle: "仅适用于本项目自带的跨域代理",
         },
-
-        WebDav: {
-          Endpoint: "WebDAV 地址",
-          UserName: "用户名",
-          Password: "密码",
-        },
-
-        UpStash: {
-          Endpoint: "UpStash Redis REST Url",
-          UserName: "备份名称",
-          Password: "UpStash Redis REST Token",
-        },
       },
 
       LocalState: "本地数据",

@@ -164,10 +164,6 @@ export const getServerSideConfig = () => {
   //   `[Server Config] using ${randomIndex + 1} of ${apiKeys.length} api key`,
   // );
 
-  const allowedWebDavEndpoints = (
-    process.env.WHITE_WEBDAV_ENDPOINTS ?? ""
-  ).split(",");
-
   return {
     baseUrl: process.env.BASE_URL,
     apiKey: getApiKey(process.env.OPENAI_API_KEY),
@@ -247,6 +243,5 @@ export const getServerSideConfig = () => {
     disableFastLink: !!process.env.DISABLE_FAST_LINK,
     customModels,
     defaultModel,
-    allowedWebDavEndpoints,
   };
 };

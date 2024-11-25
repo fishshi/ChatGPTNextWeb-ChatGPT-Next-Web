@@ -229,18 +229,6 @@ const tw = {
           Title: "代理伺服器位置",
           SubTitle: "僅適用於本專案內建的跨域代理",
         },
-
-        WebDav: {
-          Endpoint: "WebDAV 位置",
-          UserName: "使用者名稱",
-          Password: "密碼",
-        },
-
-        UpStash: {
-          Endpoint: "UpStash Redis REST Url",
-          UserName: "備份名稱",
-          Password: "UpStash Redis REST Token",
-        },
       },
 
       LocalState: "本機資料",
