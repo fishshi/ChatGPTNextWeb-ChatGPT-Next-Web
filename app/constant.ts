@@ -530,10 +530,6 @@ export const CHAT_PAGE_SIZE = 15;
 export const MAX_RENDER_MSG_COUNT = 45;
 
 export const DEFAULT_GA_ID = "G-89WN60ZK2E";
-export const PLUGINS = [
-  { name: "Plugins", path: Path.Plugins },
-  { name: "Search Chat", path: Path.SearchChat },
-];
 
 export const SAAS_CHAT_URL = "https://nextchat.dev/chat";
 export const SAAS_CHAT_UTM_URL = "https://nextchat.dev/chat?utm=github";

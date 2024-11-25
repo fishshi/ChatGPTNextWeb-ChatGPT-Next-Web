@@ -127,9 +127,6 @@ export function NewChat() {
             onClick={async () => {
               if (await showConfirm(Locale.NewChat.ConfirmNoShow)) {
                 startChat();
-                config.update(
-                  (config) => (config.dontShowMaskSplashScreen = true),
-                );
               }
             }}
           ></IconButton>
