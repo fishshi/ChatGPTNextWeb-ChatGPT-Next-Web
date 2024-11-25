@@ -780,6 +780,7 @@ export function ChatActions(props: {
           />
         )}
       </>
+      <div className={styles["chat-input-actions-end"]} />
     </div>
   );
 }
