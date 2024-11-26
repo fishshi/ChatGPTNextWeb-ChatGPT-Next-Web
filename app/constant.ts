@@ -11,7 +11,7 @@ export const RUNTIME_CONFIG_DOM = "danger-runtime-config";
 
 export const STABILITY_BASE_URL = "https://api.stability.ai";
 
-export const OPENAI_BASE_URL = "https://api.openai.com";
+export const OPENAI_BASE_URL = "http://localhost:11434";
 export const ANTHROPIC_BASE_URL = "https://api.anthropic.com";
 
 export const GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/";
@@ -39,9 +39,6 @@ export enum Path {
   Home = "/",
   Chat = "/chat",
   Settings = "/settings",
-  NewChat = "/new-chat",
-  Masks = "/masks",
-  Plugins = "/plugins",
   Auth = "/auth",
   Artifacts = "/artifacts",
   SearchChat = "/search-chat",

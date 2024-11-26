@@ -22,7 +22,6 @@ import MaxIcon from "../icons/max.svg";
 import MinIcon from "../icons/min.svg";
 import ResetIcon from "../icons/reload.svg";
 import BreakIcon from "../icons/break.svg";
-import SettingsIcon from "../icons/chat-settings.svg";
 import DeleteIcon from "../icons/clear.svg";
 import PinIcon from "../icons/pin.svg";
 import EditIcon from "../icons/rename.svg";
@@ -53,7 +52,6 @@ import {
 
 import {
   copyToClipboard,
-  selectOrCopy,
   autoGrowTextArea,
   useMobileScreen,
   getMessageTextContent,
@@ -140,7 +138,7 @@ export function SessionConfigModel(props: { onClose: () => void }) {
             bordered
             text={Locale.Chat.Config.SaveAs}
             onClick={() => {
-              navigate(Path.Masks);
+              navigate("");
               setTimeout(() => {
                 maskStore.create(session.mask);
               }, 500);
@@ -529,13 +527,6 @@ export function ChatActions(props: {
             icon={<BottomIcon />}
           />
         )}
-        {props.hitBottom && (
-          <ChatAction
-            onClick={props.showPromptModal}
-            text={Locale.Chat.InputActions.Settings}
-            icon={<SettingsIcon />}
-          />
-        )}
 
         {showUploadImage && (
           <ChatAction
@@ -811,7 +802,6 @@ function _Chat() {
   // chat commands shortcuts
   const chatCommands = useChatCommand({
     new: () => chatStore.newSession(),
-    newm: () => navigate(Path.NewChat),
     prev: () => chatStore.nextSession(-1),
     next: () => chatStore.nextSession(1),
     clear: () =>
@@ -845,6 +835,7 @@ function _Chat() {
 
   const doSubmit = (userInput: string) => {
     if (userInput.trim() === "" && isEmpty(attachImages)) return;
+    if (isLoading) return;
     const matchCommand = chatCommands.match(userInput);
     if (matchCommand.matched) {
       setUserInput("");
@@ -929,16 +920,6 @@ function _Chat() {
     }
     if (shouldSubmit(e) && promptHints.length === 0) {
       doSubmit(userInput);
-      e.preventDefault();
-    }
-  };
-  const onRightClick = (e: any, message: ChatMessage) => {
-    // copy to clipboard
-    if (selectOrCopy(e.currentTarget, getMessageTextContent(message))) {
-      if (userInput.length === 0) {
-        setUserInput(getMessageTextContent(message));
-      }
-
       e.preventDefault();
     }
   };

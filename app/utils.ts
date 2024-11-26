@@ -270,14 +270,8 @@ export function isVisionModel(model: string) {
 
   return (
     !excludeKeywords.some((keyword) => model.includes(keyword)) &&
-    (visionKeywords.some((keyword) => model.includes(keyword)) ||
-      isGpt4Turbo ||
-      isDalle3(model))
+    (visionKeywords.some((keyword) => model.includes(keyword)) || isGpt4Turbo)
   );
-}
-
-export function isDalle3(model: string) {
-  return "dall-e-3" === model;
 }
 
 export function showPlugins(provider: ServiceProvider, model: string) {

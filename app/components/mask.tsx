@@ -38,12 +38,7 @@ import { useNavigate } from "react-router-dom";
 
 import chatStyle from "./chat.module.scss";
 import { useState } from "react";
-import {
-  copyToClipboard,
-  downloadAs,
-  getMessageImages,
-  readFromFile,
-} from "../utils";
+import { downloadAs, getMessageImages, readFromFile } from "../utils";
 import { Updater } from "../typing";
 import { ModelConfigList } from "./model-config";
 import { FileName, Path } from "../constant";
@@ -94,10 +89,7 @@ export function MaskConfig(props: {
     });
   };
 
-  const copyMaskLink = () => {
-    const maskLink = `${location.protocol}//${location.host}/#${Path.NewChat}?mask=${props.mask.id}`;
-    copyToClipboard(maskLink);
-  };
+  const copyMaskLink = () => {};
 
   const globalConfig = useAppConfig();
 
@@ -660,7 +652,6 @@ export function MaskPage() {
                 bordered
                 text={Locale.Mask.EditModal.Clone}
                 onClick={() => {
-                  navigate(Path.Masks);
                   maskStore.create(editingMask);
                   setEditingMaskId(undefined);
                 }}

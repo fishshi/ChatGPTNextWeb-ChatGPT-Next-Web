@@ -37,11 +37,7 @@ import {
 } from "../api";
 import Locale from "../../locales";
 import { getClientConfig } from "@/app/config/client";
-import {
-  getMessageTextContent,
-  isVisionModel,
-  isDalle3 as _isDalle3,
-} from "@/app/utils";
+import { getMessageTextContent, isVisionModel } from "@/app/utils";
 import { fetch } from "@/app/utils/stream";
 
 export interface OpenAIListModelResponse {
@@ -194,60 +190,44 @@ export class ChatGPTApi implements LLMApi {
 
     let requestPayload: RequestPayload | DalleRequestPayload;
 
-    const isDalle3 = _isDalle3(options.config.model);
     const isO1 = options.config.model.startsWith("o1");
-    if (isDalle3) {
-      const prompt = getMessageTextContent(
-        options.messages.slice(-1)?.pop() as any,
-      );
-      requestPayload = {
-        model: options.config.model,
-        prompt,
-        // URLs are only valid for 60 minutes after the image has been generated.
-        response_format: "b64_json", // using b64_json, and save image in CacheStorage
-        n: 1,
-        size: options.config?.size ?? "1024x1024",
-        quality: options.config?.quality ?? "standard",
-        style: options.config?.style ?? "vivid",
-      };
-    } else {
-      const visionModel = isVisionModel(options.config.model);
-      const messages: ChatOptions["messages"] = [];
-      for (const v of options.messages) {
-        const content = visionModel
-          ? await preProcessImageContent(v.content)
-          : getMessageTextContent(v);
-        if (!(isO1 && v.role === "system"))
-          messages.push({ role: v.role, content });
-      }
 
-      // O1 not support image, tools (plugin in ChatGPTNextWeb) and system, stream, logprobs, temperature, top_p, n, presence_penalty, frequency_penalty yet.
-      requestPayload = {
-        messages,
-        stream: !isO1 ? options.config.stream : false,
-        model: modelConfig.model,
-        temperature: !isO1 ? modelConfig.temperature : 1,
-        presence_penalty: !isO1 ? modelConfig.presence_penalty : 0,
-        frequency_penalty: !isO1 ? modelConfig.frequency_penalty : 0,
-        top_p: !isO1 ? modelConfig.top_p : 1,
-        // max_tokens: Math.max(modelConfig.max_tokens, 1024),
-        // Please do not ask me why not send max_tokens, no reason, this param is just shit, I dont want to explain anymore.
-      };
+    const visionModel = isVisionModel(options.config.model);
+    const messages: ChatOptions["messages"] = [];
+    for (const v of options.messages) {
+      const content = visionModel
+        ? await preProcessImageContent(v.content)
+        : getMessageTextContent(v);
+      if (!(isO1 && v.role === "system"))
+        messages.push({ role: v.role, content });
+    }
 
-      // O1 使用 max_completion_tokens 控制token数 (https://platform.openai.com/docs/guides/reasoning#controlling-costs)
-      if (isO1) {
-        requestPayload["max_completion_tokens"] = modelConfig.max_tokens;
-      }
+    // O1 not support image, tools (plugin in ChatGPTNextWeb) and system, stream, logprobs, temperature, top_p, n, presence_penalty, frequency_penalty yet.
+    requestPayload = {
+      messages,
+      stream: !isO1 ? options.config.stream : false,
+      model: "llama3.1", // model: modelConfig.model,
+      temperature: !isO1 ? modelConfig.temperature : 1,
+      presence_penalty: !isO1 ? modelConfig.presence_penalty : 0,
+      frequency_penalty: !isO1 ? modelConfig.frequency_penalty : 0,
+      top_p: !isO1 ? modelConfig.top_p : 1,
+      // max_tokens: Math.max(modelConfig.max_tokens, 1024),
+      // Please do not ask me why not send max_tokens, no reason, this param is just shit, I dont want to explain anymore.
+    };
 
-      // add max_tokens to vision model
-      if (visionModel) {
-        requestPayload["max_tokens"] = Math.max(modelConfig.max_tokens, 4000);
-      }
+    // O1 使用 max_completion_tokens 控制token数 (https://platform.openai.com/docs/guides/reasoning#controlling-costs)
+    if (isO1) {
+      requestPayload["max_completion_tokens"] = modelConfig.max_tokens;
+    }
+
+    // add max_tokens to vision model
+    if (visionModel) {
+      requestPayload["max_tokens"] = Math.max(modelConfig.max_tokens, 4000);
     }
 
     console.log("[Request] openai payload: ", requestPayload);
 
-    const shouldStream = !isDalle3 && !!options.config.stream && !isO1;
+    const shouldStream = !!options.config.stream && !isO1;
     const controller = new AbortController();
     options.onController?.(controller);
 
@@ -273,15 +253,13 @@ export class ChatGPTApi implements LLMApi {
             model?.provider?.providerName === ServiceProvider.Azure,
         );
         chatPath = this.path(
-          (isDalle3 ? Azure.ImagePath : Azure.ChatPath)(
+          Azure.ChatPath(
             (model?.displayName ?? model?.name) as string,
             useCustomConfig ? useAccessStore.getState().azureApiVersion : "",
           ),
         );
       } else {
-        chatPath = this.path(
-          isDalle3 ? OpenaiPath.ImagePath : OpenaiPath.ChatPath,
-        );
+        chatPath = this.path(OpenaiPath.ChatPath);
       }
       if (shouldStream) {
         let index = -1;
@@ -359,7 +337,7 @@ export class ChatGPTApi implements LLMApi {
         // make a fetch request
         const requestTimeoutId = setTimeout(
           () => controller.abort(),
-          isDalle3 || isO1 ? REQUEST_TIMEOUT_MS * 4 : REQUEST_TIMEOUT_MS, // dalle3 using b64_json is slow.
+          isO1 ? REQUEST_TIMEOUT_MS * 4 : REQUEST_TIMEOUT_MS, // dalle3 using b64_json is slow.
         );
 
         const res = await fetch(chatPath, chatPayload);

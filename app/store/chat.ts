@@ -21,7 +21,7 @@ import {
   ServiceProvider,
 } from "../constant";
 import Locale, { getLang } from "../locales";
-import { isDalle3, safeLocalStorage } from "../utils";
+import { safeLocalStorage } from "../utils";
 import { prettyObject } from "../utils/format";
 import { createPersistStore } from "../utils/store";
 import { estimateTokenLength } from "../utils/token";
@@ -607,10 +607,6 @@ export const useChatStore = createPersistStore(
         const config = useAppConfig.getState();
         const session = targetSession;
         const modelConfig = session.mask.modelConfig;
-        // skip summarize when using dalle3?
-        if (isDalle3(modelConfig.model)) {
-          return;
-        }
 
         // if not config compressModel, then using getSummarizeModel
         const [model, providerName] = modelConfig.compressModel
