@@ -228,20 +228,6 @@ export function MessageExporter() {
               ))}
             </Select>
           </ListItem>
-          <ListItem
-            title={Locale.Export.IncludeContext.Title}
-            subTitle={Locale.Export.IncludeContext.SubTitle}
-          >
-            <input
-              type="checkbox"
-              checked={exportConfig.includeContext}
-              onChange={(e) => {
-                updateExportConfig(
-                  (config) => (config.includeContext = e.currentTarget.checked),
-                );
-              }}
-            ></input>
-          </ListItem>
         </List>
         <MessageSelector
           selection={selection}
