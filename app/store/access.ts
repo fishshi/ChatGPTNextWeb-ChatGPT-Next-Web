@@ -9,7 +9,6 @@ import {
   BAIDU_BASE_URL,
   BYTEDANCE_BASE_URL,
   ALIBABA_BASE_URL,
-  TENCENT_BASE_URL,
   MOONSHOT_BASE_URL,
   STABILITY_BASE_URL,
   IFLYTEK_BASE_URL,
@@ -38,8 +37,6 @@ const DEFAULT_BAIDU_URL = isApp ? BAIDU_BASE_URL : ApiPath.Baidu;
 const DEFAULT_BYTEDANCE_URL = isApp ? BYTEDANCE_BASE_URL : ApiPath.ByteDance;
 
 const DEFAULT_ALIBABA_URL = isApp ? ALIBABA_BASE_URL : ApiPath.Alibaba;
-
-const DEFAULT_TENCENT_URL = isApp ? TENCENT_BASE_URL : ApiPath.Tencent;
 
 const DEFAULT_MOONSHOT_URL = isApp ? MOONSHOT_BASE_URL : ApiPath.Moonshot;
 
@@ -97,11 +94,6 @@ const DEFAULT_ACCESS_STATE = {
   //stability
   stabilityUrl: DEFAULT_STABILITY_URL,
   stabilityApiKey: "",
-
-  // tencent
-  tencentUrl: DEFAULT_TENCENT_URL,
-  tencentSecretKey: "",
-  tencentSecretId: "",
 
   // iflytek
   iflytekUrl: DEFAULT_IFLYTEK_URL,
@@ -164,10 +156,6 @@ export const useAccessStore = createPersistStore(
       return ensure(get(), ["alibabaApiKey"]);
     },
 
-    isValidTencent() {
-      return ensure(get(), ["tencentSecretKey", "tencentSecretId"]);
-    },
-
     isValidMoonshot() {
       return ensure(get(), ["moonshotApiKey"]);
     },
@@ -195,7 +183,6 @@ export const useAccessStore = createPersistStore(
         this.isValidBaidu() ||
         this.isValidByteDance() ||
         this.isValidAlibaba() ||
-        this.isValidTencent() ||
         this.isValidMoonshot() ||
         this.isValidIflytek() ||
         this.isValidXAI() ||

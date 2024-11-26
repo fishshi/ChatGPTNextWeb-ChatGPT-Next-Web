@@ -461,8 +461,6 @@ export function ChatActions(props: {
 
   // switch model
   const currentModel = session.mask.modelConfig.model;
-  const currentProviderName =
-    session.mask.modelConfig?.providerName || ServiceProvider.OpenAI;
   const allModels = useAllModels();
   const models = useMemo(() => {
     const filteredModels = allModels.filter((m) => m.available);

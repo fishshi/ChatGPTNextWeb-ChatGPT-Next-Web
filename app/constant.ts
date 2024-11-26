@@ -23,8 +23,6 @@ export const BYTEDANCE_BASE_URL = "https://ark.cn-beijing.volces.com";
 
 export const ALIBABA_BASE_URL = "https://dashscope.aliyuncs.com/api/";
 
-export const TENCENT_BASE_URL = "https://hunyuan.tencentcloudapi.com";
-
 export const MOONSHOT_BASE_URL = "https://api.moonshot.cn";
 export const IFLYTEK_BASE_URL = "https://spark-api-open.xf-yun.com";
 
@@ -53,7 +51,6 @@ export enum ApiPath {
   Baidu = "/api/baidu",
   ByteDance = "/api/bytedance",
   Alibaba = "/api/alibaba",
-  Tencent = "/api/tencent",
   Moonshot = "/api/moonshot",
   Iflytek = "/api/iflytek",
   Stability = "/api/stability",
@@ -107,7 +104,6 @@ export enum ServiceProvider {
   Baidu = "Baidu",
   ByteDance = "ByteDance",
   Alibaba = "Alibaba",
-  Tencent = "Tencent",
   Moonshot = "Moonshot",
   Stability = "Stability",
   Iflytek = "Iflytek",
@@ -205,10 +201,6 @@ export const Alibaba = {
   ChatPath: "v1/services/aigc/text-generation/generation",
 };
 
-export const Tencent = {
-  ExampleEndpoint: TENCENT_BASE_URL,
-};
-
 export const Moonshot = {
   ExampleEndpoint: MOONSHOT_BASE_URL,
   ChatPath: "v1/chat/completions",
@@ -272,6 +264,7 @@ export const KnowledgeCutOffDate: Record<string, string> = {
 };
 
 const openaiModels = [
+  "llama3.1",
   "gpt-3.5-turbo",
   "gpt-3.5-turbo-1106",
   "gpt-3.5-turbo-0125",
@@ -352,16 +345,6 @@ const alibabaModes = [
   "qwen-max-0403",
   "qwen-max-0107",
   "qwen-max-longcontext",
-];
-
-const tencentModels = [
-  "hunyuan-pro",
-  "hunyuan-standard",
-  "hunyuan-lite",
-  "hunyuan-role",
-  "hunyuan-functioncall",
-  "hunyuan-code",
-  "hunyuan-vision",
 ];
 
 const moonshotModes = ["moonshot-v1-8k", "moonshot-v1-32k", "moonshot-v1-128k"];
@@ -464,17 +447,6 @@ export const DEFAULT_MODELS = [
       providerName: "Alibaba",
       providerType: "alibaba",
       sorted: 7,
-    },
-  })),
-  ...tencentModels.map((name) => ({
-    name,
-    available: true,
-    sorted: seq++,
-    provider: {
-      id: "tencent",
-      providerName: "Tencent",
-      providerType: "tencent",
-      sorted: 8,
     },
   })),
   ...moonshotModes.map((name) => ({

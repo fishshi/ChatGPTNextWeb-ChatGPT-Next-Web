@@ -206,7 +206,7 @@ export class ChatGPTApi implements LLMApi {
     requestPayload = {
       messages,
       stream: !isO1 ? options.config.stream : false,
-      model: "llama3.1", // model: modelConfig.model,
+      model: modelConfig.model,
       temperature: !isO1 ? modelConfig.temperature : 1,
       presence_penalty: !isO1 ? modelConfig.presence_penalty : 0,
       frequency_penalty: !isO1 ? modelConfig.frequency_penalty : 0,
