@@ -6,7 +6,6 @@ import { InputRange } from "./input-range";
 import { ListItem, Select } from "./ui-lib";
 import { useAllModels } from "../utils/hooks";
 import { groupBy } from "lodash-es";
-import styles from "./model-config.module.scss";
 import { getModelProvider } from "../utils/model";
 
 export function ModelConfigList(props: {
@@ -19,7 +18,6 @@ export function ModelConfigList(props: {
     "provider.providerName",
   );
   const value = `${props.modelConfig.model}@${props.modelConfig?.providerName}`;
-  const compressModelValue = `${props.modelConfig.compressModel}@${props.modelConfig?.compressProviderName}`;
 
   return (
     <>
@@ -217,8 +215,8 @@ export function ModelConfigList(props: {
         <input
           aria-label={Locale.Settings.CompressThreshold.Title}
           type="number"
-          min={500}
-          max={4000}
+          min={512}
+          max={10240}
           value={props.modelConfig.compressMessageLengthThreshold}
           onChange={(e) =>
             props.updateConfig(
@@ -240,33 +238,6 @@ export function ModelConfigList(props: {
             )
           }
         ></input>
-      </ListItem>
-      <ListItem
-        title={Locale.Settings.CompressModel.Title}
-        subTitle={Locale.Settings.CompressModel.SubTitle}
-      >
-        <Select
-          className={styles["select-compress-model"]}
-          aria-label={Locale.Settings.CompressModel.Title}
-          value={compressModelValue}
-          onChange={(e) => {
-            const [model, providerName] = getModelProvider(
-              e.currentTarget.value,
-            );
-            props.updateConfig((config) => {
-              config.compressModel = ModalConfigValidator.model(model);
-              config.compressProviderName = providerName as ServiceProvider;
-            });
-          }}
-        >
-          {allModels
-            .filter((v) => v.available)
-            .map((v, i) => (
-              <option value={`${v.name}@${v.provider?.providerName}`} key={i}>
-                {v.displayName}({v.provider?.providerName})
-              </option>
-            ))}
-        </Select>
       </ListItem>
     </>
   );
