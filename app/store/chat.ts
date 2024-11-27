@@ -17,7 +17,6 @@ import {
   KnowledgeCutOffDate,
   StoreKey,
   SUMMARIZE_MODEL,
-  GEMINI_SUMMARIZE_MODEL,
   ServiceProvider,
 } from "../constant";
 import Locale, { getLang } from "../locales";
@@ -131,9 +130,6 @@ function getSummarizeModel(
         summarizeModel.provider?.providerName as string,
       ];
     }
-  }
-  if (currentModel.startsWith("gemini")) {
-    return [GEMINI_SUMMARIZE_MODEL, ServiceProvider.Google];
   }
   return [currentModel, providerName];
 }

@@ -1,19 +1,8 @@
 import {
-  GoogleSafetySettingsThreshold,
   ServiceProvider,
   StoreKey,
   ApiPath,
   OPENAI_BASE_URL,
-  ANTHROPIC_BASE_URL,
-  GEMINI_BASE_URL,
-  BAIDU_BASE_URL,
-  BYTEDANCE_BASE_URL,
-  ALIBABA_BASE_URL,
-  MOONSHOT_BASE_URL,
-  STABILITY_BASE_URL,
-  IFLYTEK_BASE_URL,
-  XAI_BASE_URL,
-  CHATGLM_BASE_URL,
 } from "../constant";
 import { getHeaders } from "../client/api";
 import { getClientConfig } from "../config/client";
@@ -28,26 +17,6 @@ const isApp = getClientConfig()?.buildMode === "export";
 
 const DEFAULT_OPENAI_URL = isApp ? OPENAI_BASE_URL : ApiPath.OpenAI;
 
-const DEFAULT_GOOGLE_URL = isApp ? GEMINI_BASE_URL : ApiPath.Google;
-
-const DEFAULT_ANTHROPIC_URL = isApp ? ANTHROPIC_BASE_URL : ApiPath.Anthropic;
-
-const DEFAULT_BAIDU_URL = isApp ? BAIDU_BASE_URL : ApiPath.Baidu;
-
-const DEFAULT_BYTEDANCE_URL = isApp ? BYTEDANCE_BASE_URL : ApiPath.ByteDance;
-
-const DEFAULT_ALIBABA_URL = isApp ? ALIBABA_BASE_URL : ApiPath.Alibaba;
-
-const DEFAULT_MOONSHOT_URL = isApp ? MOONSHOT_BASE_URL : ApiPath.Moonshot;
-
-const DEFAULT_STABILITY_URL = isApp ? STABILITY_BASE_URL : ApiPath.Stability;
-
-const DEFAULT_IFLYTEK_URL = isApp ? IFLYTEK_BASE_URL : ApiPath.Iflytek;
-
-const DEFAULT_XAI_URL = isApp ? XAI_BASE_URL : ApiPath.XAI;
-
-const DEFAULT_CHATGLM_URL = isApp ? CHATGLM_BASE_URL : ApiPath.ChatGLM;
-
 const DEFAULT_ACCESS_STATE = {
   accessCode: "",
   useCustomConfig: false,
@@ -57,56 +26,6 @@ const DEFAULT_ACCESS_STATE = {
   // openai
   openaiUrl: DEFAULT_OPENAI_URL,
   openaiApiKey: "",
-
-  // azure
-  azureUrl: "",
-  azureApiKey: "",
-  azureApiVersion: "2023-08-01-preview",
-
-  // google ai studio
-  googleUrl: DEFAULT_GOOGLE_URL,
-  googleApiKey: "",
-  googleApiVersion: "v1",
-  googleSafetySettings: GoogleSafetySettingsThreshold.BLOCK_ONLY_HIGH,
-
-  // anthropic
-  anthropicUrl: DEFAULT_ANTHROPIC_URL,
-  anthropicApiKey: "",
-  anthropicApiVersion: "2023-06-01",
-
-  // baidu
-  baiduUrl: DEFAULT_BAIDU_URL,
-  baiduApiKey: "",
-  baiduSecretKey: "",
-
-  // bytedance
-  bytedanceUrl: DEFAULT_BYTEDANCE_URL,
-  bytedanceApiKey: "",
-
-  // alibaba
-  alibabaUrl: DEFAULT_ALIBABA_URL,
-  alibabaApiKey: "",
-
-  // moonshot
-  moonshotUrl: DEFAULT_MOONSHOT_URL,
-  moonshotApiKey: "",
-
-  //stability
-  stabilityUrl: DEFAULT_STABILITY_URL,
-  stabilityApiKey: "",
-
-  // iflytek
-  iflytekUrl: DEFAULT_IFLYTEK_URL,
-  iflytekApiKey: "",
-  iflytekApiSecret: "",
-
-  // xai
-  xaiUrl: DEFAULT_XAI_URL,
-  xaiApiKey: "",
-
-  // chatglm
-  chatglmUrl: DEFAULT_CHATGLM_URL,
-  chatglmApiKey: "",
 
   // server config
   needCode: true,
@@ -132,61 +51,12 @@ export const useAccessStore = createPersistStore(
       return ensure(get(), ["openaiApiKey"]);
     },
 
-    isValidAzure() {
-      return ensure(get(), ["azureUrl", "azureApiKey", "azureApiVersion"]);
-    },
-
-    isValidGoogle() {
-      return ensure(get(), ["googleApiKey"]);
-    },
-
-    isValidAnthropic() {
-      return ensure(get(), ["anthropicApiKey"]);
-    },
-
-    isValidBaidu() {
-      return ensure(get(), ["baiduApiKey", "baiduSecretKey"]);
-    },
-
-    isValidByteDance() {
-      return ensure(get(), ["bytedanceApiKey"]);
-    },
-
-    isValidAlibaba() {
-      return ensure(get(), ["alibabaApiKey"]);
-    },
-
-    isValidMoonshot() {
-      return ensure(get(), ["moonshotApiKey"]);
-    },
-    isValidIflytek() {
-      return ensure(get(), ["iflytekApiKey"]);
-    },
-
-    isValidXAI() {
-      return ensure(get(), ["xaiApiKey"]);
-    },
-
-    isValidChatGLM() {
-      return ensure(get(), ["chatglmApiKey"]);
-    },
-
     isAuthorized() {
       this.fetch();
 
       // has token or has code or disabled access control
       return (
         this.isValidOpenAI() ||
-        this.isValidAzure() ||
-        this.isValidGoogle() ||
-        this.isValidAnthropic() ||
-        this.isValidBaidu() ||
-        this.isValidByteDance() ||
-        this.isValidAlibaba() ||
-        this.isValidMoonshot() ||
-        this.isValidIflytek() ||
-        this.isValidXAI() ||
-        this.isValidChatGLM() ||
         !this.enabledAccessControl() ||
         (this.enabledAccessControl() && ensure(get(), ["accessCode"]))
       );

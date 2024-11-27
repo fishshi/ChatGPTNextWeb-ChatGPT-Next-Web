@@ -5,9 +5,7 @@ import {
   OPENAI_BASE_URL,
   DEFAULT_MODELS,
   OpenaiPath,
-  Azure,
   REQUEST_TIMEOUT_MS,
-  ServiceProvider,
 } from "@/app/constant";
 import {
   ChatMessageTool,
@@ -16,7 +14,6 @@ import {
   useChatStore,
   usePluginStore,
 } from "@/app/store";
-import { collectModelsWithDefaultModel } from "@/app/utils/model";
 import {
   preProcessImageContent,
   uploadImage,
@@ -84,13 +81,7 @@ export class ChatGPTApi implements LLMApi {
 
     const isAzure = path.includes("deployments");
     if (accessStore.useCustomConfig) {
-      if (isAzure && !accessStore.isValidAzure()) {
-        throw Error(
-          "incomplete azure config, please check it in your settings page",
-        );
-      }
-
-      baseUrl = isAzure ? accessStore.azureUrl : accessStore.openaiUrl;
+      baseUrl = accessStore.openaiUrl;
     }
 
     if (baseUrl.length === 0) {
@@ -233,34 +224,7 @@ export class ChatGPTApi implements LLMApi {
 
     try {
       let chatPath = "";
-      if (modelConfig.providerName === ServiceProvider.Azure) {
-        // find model, and get displayName as deployName
-        const { models: configModels, customModels: configCustomModels } =
-          useAppConfig.getState();
-        const {
-          defaultModel,
-          customModels: accessCustomModels,
-          useCustomConfig,
-        } = useAccessStore.getState();
-        const models = collectModelsWithDefaultModel(
-          configModels,
-          [configCustomModels, accessCustomModels].join(","),
-          defaultModel,
-        );
-        const model = models.find(
-          (model) =>
-            model.name === modelConfig.model &&
-            model?.provider?.providerName === ServiceProvider.Azure,
-        );
-        chatPath = this.path(
-          Azure.ChatPath(
-            (model?.displayName ?? model?.name) as string,
-            useCustomConfig ? useAccessStore.getState().azureApiVersion : "",
-          ),
-        );
-      } else {
-        chatPath = this.path(OpenaiPath.ChatPath);
-      }
+      chatPath = this.path(OpenaiPath.ChatPath);
       if (shouldStream) {
         let index = -1;
         const [tools, funcs] = usePluginStore
