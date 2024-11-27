@@ -191,7 +191,8 @@ const cn = {
     },
     InjectSystemPrompts: {
       Title: "注入系统级提示信息",
-      SubTitle: "强制给每次请求的消息列表开头添加一个模拟 ChatGPT 的系统提示",
+      SubTitle:
+        "强制给每次请求的消息列表开头添加一个模拟私人健康顾问的系统提示",
     },
     InputTemplate: {
       Title: "用户输入预处理",
@@ -531,11 +532,8 @@ const cn = {
     Clear: "上下文已清除",
     Revert: "恢复上下文",
   },
-  Discovery: {
-    Name: "发现",
-  },
-  FineTuned: {
-    Sysmessage: "你是一个助手",
+  Search: {
+    Name: "搜索",
   },
   SearchChat: {
     Name: "搜索",

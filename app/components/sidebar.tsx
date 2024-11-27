@@ -226,17 +226,20 @@ export function SideBar(props: { className?: string }) {
       {...props}
     >
       <SideBarHeader
-        title="NextChat"
-        subTitle="Build your own AI assistant."
+        title="私人健康顾问"
+        subTitle="提供最专业的健康咨询服务"
         logo={<ChatGptIcon />}
         shouldNarrow={shouldNarrow}
       >
         <div className={styles["sidebar-header-bar"]}>
           <IconButton
-            icon={<DiscoveryIcon />}
-            text={shouldNarrow ? undefined : Locale.Discovery.Name}
+            icon={<AddIcon />}
+            text={shouldNarrow ? undefined : Locale.Home.NewChat}
             className={styles["sidebar-bar-button"]}
-            onClick={() => navigate(Path.SearchChat)}
+            onClick={() => {
+              chatStore.newSession();
+              navigate(Path.Chat);
+            }}
             shadow
           />
         </div>
@@ -276,12 +279,9 @@ export function SideBar(props: { className?: string }) {
         }
         secondaryAction={
           <IconButton
-            icon={<AddIcon />}
-            text={shouldNarrow ? undefined : Locale.Home.NewChat}
-            onClick={() => {
-              chatStore.newSession();
-              navigate(Path.Chat);
-            }}
+            icon={<DiscoveryIcon />}
+            text={shouldNarrow ? undefined : Locale.Search.Name}
+            onClick={() => navigate(Path.SearchChat)}
             shadow
           />
         }

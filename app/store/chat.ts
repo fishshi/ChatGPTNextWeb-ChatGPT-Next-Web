@@ -16,7 +16,6 @@ import {
   DEFAULT_SYSTEM_TEMPLATE,
   KnowledgeCutOffDate,
   StoreKey,
-  SUMMARIZE_MODEL,
   ServiceProvider,
 } from "../constant";
 import Locale, { getLang } from "../locales";
@@ -25,8 +24,6 @@ import { prettyObject } from "../utils/format";
 import { createPersistStore } from "../utils/store";
 import { estimateTokenLength } from "../utils/token";
 import { ModelConfig, ModelType, useAppConfig } from "./config";
-import { useAccessStore } from "./access";
-import { collectModelsWithDefaultModel } from "../utils/model";
 import { createEmptyMask, Mask } from "./mask";
 
 const localStorage = safeLocalStorage();
@@ -112,25 +109,6 @@ function getSummarizeModel(
   currentModel: string,
   providerName: string,
 ): string[] {
-  // if it is using gpt-* models, force to use 4o-mini to summarize
-  if (currentModel.startsWith("gpt") || currentModel.startsWith("chatgpt")) {
-    const configStore = useAppConfig.getState();
-    const accessStore = useAccessStore.getState();
-    const allModel = collectModelsWithDefaultModel(
-      configStore.models,
-      [configStore.customModels, accessStore.customModels].join(","),
-      accessStore.defaultModel,
-    );
-    const summarizeModel = allModel.find(
-      (m) => m.name === SUMMARIZE_MODEL && m.available,
-    );
-    if (summarizeModel) {
-      return [
-        summarizeModel.name,
-        summarizeModel.provider?.providerName as string,
-      ];
-    }
-  }
   return [currentModel, providerName];
 }
 
@@ -501,10 +479,7 @@ export const useChatStore = createPersistStore(
         const contextPrompts = session.mask.context.slice();
 
         // system prompts, to get close to OpenAI Web ChatGPT
-        const shouldInjectSystemPrompts =
-          modelConfig.enableInjectSystemPrompts &&
-          (session.mask.modelConfig.model.startsWith("gpt-") ||
-            session.mask.modelConfig.model.startsWith("chatgpt-"));
+        const shouldInjectSystemPrompts = modelConfig.enableInjectSystemPrompts;
 
         var systemPrompts: ChatMessage[] = [];
         systemPrompts = shouldInjectSystemPrompts

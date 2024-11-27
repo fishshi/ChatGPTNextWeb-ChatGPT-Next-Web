@@ -37,7 +37,7 @@ import Locale, {
   getLang,
 } from "../locales";
 import { copyToClipboard } from "../utils";
-import { OPENAI_BASE_URL, Path, ServiceProvider } from "../constant";
+import { OPENAI_BASE_URL, Path } from "../constant";
 import { Prompt, SearchService, usePromptStore } from "../store/prompt";
 import { ErrorBoundary } from "./error";
 import { InputRange } from "./input-range";
@@ -259,21 +259,9 @@ export function Settings() {
   const shouldHideBalanceQuery = useMemo(() => {
     const isOpenAiUrl = accessStore.openaiUrl.includes(OPENAI_BASE_URL);
 
-    return (
-      accessStore.hideBalanceQuery ||
-      isOpenAiUrl ||
-      accessStore.provider === ServiceProvider.Azure
-    );
-  }, [
-    accessStore.hideBalanceQuery,
-    accessStore.openaiUrl,
-    accessStore.provider,
-  ]);
+    return accessStore.hideBalanceQuery || isOpenAiUrl;
+  }, [accessStore.hideBalanceQuery, accessStore.openaiUrl]);
 
-  const usage = {
-    used: updateStore.used,
-    subscription: updateStore.subscription,
-  };
   function checkUsage(force = false) {
     if (shouldHideBalanceQuery) {
       return;

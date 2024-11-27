@@ -180,7 +180,8 @@ const tw = {
     },
     InjectSystemPrompts: {
       Title: "匯入系統提示",
-      SubTitle: "強制在每個請求的訊息列表開頭新增一個模擬 ChatGPT 的系統提示",
+      SubTitle:
+        "強制在每個請求的訊息列表開頭新增一個模擬私人健康顧問的系統提示",
     },
     InputTemplate: {
       Title: "使用者輸入預處理",
@@ -430,7 +431,6 @@ const tw = {
     Revert: "恢復上下文",
   },
   Plugin: { Name: "外掛" },
-  FineTuned: { Sysmessage: "你是一個助手" },
   Mask: {
     Name: "角色範本",
     Page: {
